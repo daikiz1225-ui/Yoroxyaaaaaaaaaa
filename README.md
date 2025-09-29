@@ -1,1 +1,1 @@
-# Light
+Japanese Webへようこそ！
