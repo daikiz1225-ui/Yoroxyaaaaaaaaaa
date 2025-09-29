@@ -26,6 +26,10 @@ app.get('/proxy', (req, res) => {
     res.sendFile(path.join(process.cwd(), '/public/proxy.html'));
 });
 
+app.get('/proxy', (req, res) => {
+    res.sendFile(path.join(process.cwd(), '/public/video-url-1.html'));
+});
+
 server.on('request', (req, res) => {
   if (bareServer.shouldRoute(req)) {
     bareServer.routeRequest(req, res)
