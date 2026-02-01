@@ -47,7 +47,7 @@ class crypts {
 
 function resolveInput(value) {
     const input = value.trim();
-    const searchTemplate = "https://www.google.com/search?q=%s";
+    const searchTemplate = "http://duckduckgo.com/?q=%s";
 
     if (!input) return "";
 
