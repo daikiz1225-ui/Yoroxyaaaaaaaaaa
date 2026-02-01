@@ -1,103 +1,106 @@
-/* Reset */
+/* ===============================
+   Reset (safe)
+=============================== */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ===============================
+   Root variables (統合)
+=============================== */
+
 :root {
-  --font-main: 'Helvetica Neue', sans-serif;
-  --color-bg: #f4f4f9;
-  --color-text: #333;
-  --color-primary: #1e88e5;
+  --font-main: Arial, 'Helvetica Neue', sans-serif;
+
+  --color-bg: #ffffff;
+  --color-text: #4c4c4c;
+
+  --color-primary: var(--theme-color);
   --color-secondary: #1565c0;
+
   --max-width: 800px;
 }
+
+/* ===============================
+   Base (Yoroxy互換)
+=============================== */
 
 body {
   font-family: var(--font-main);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
+  margin: 0;
 }
 
-header {
+/* ===============================
+   Optional Content Layout
+   （将来ブログ等を置く場合）
+=============================== */
+
+.yoroxy-content {
   width: 100%;
   max-width: var(--max-width);
+  margin: 2rem auto;
+}
+
+.yoroxy-content header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
   border-bottom: 2px solid #ddd;
   padding-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
-header h1 a {
+.yoroxy-content header h1 a {
   color: var(--color-primary);
   text-decoration: none;
 }
 
-nav a {
+.yoroxy-content nav a {
   margin-left: 1rem;
   text-decoration: none;
   color: var(--color-secondary);
   font-weight: bold;
 }
 
-.hero {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.posts {
-  width: 100%;
-  max-width: var(--max-width);
-}
-
-article {
-  background: white;
+.yoroxy-content article {
+  background: #fff;
   padding: 1rem;
   margin-bottom: 1.5rem;
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-article h3 a {
-  color: var(--color-primary);
-  text-decoration: none;
-}
+/* ===============================
+   Chat UI (isolated)
+=============================== */
 
-footer {
-  margin-top: 4rem;
-  font-size: 0.9rem;
-  color: #777;
-}
-
-/* Chat Styles */
 #chat-section {
   position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 350px;
-  height: 400px;
-  background-color: white;
-  border-top-left-radius: 8px;
-  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  bottom: 10px;
+  right: 10px;
+  width: 340px;
+  height: 380px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  z-index: 9999;
 }
 
 #chat-box {
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 10px;
+  gap: 8px;
 }
 
 #chat-content {
@@ -106,20 +109,22 @@ footer {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   border-radius: 6px;
-  padding: 10px;
+  padding: 8px;
 }
 
 #chat-input {
-  padding: 10px;
+  padding: 8px;
   border-radius: 6px;
   border: 1px solid #ddd;
   width: 100%;
+  outline: none;
 }
 
 #send-btn {
-  padding: 10px;
+  margin-top: 6px;
+  padding: 8px;
   background-color: var(--color-primary);
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -128,4 +133,3 @@ footer {
 #send-btn:hover {
   background-color: var(--color-secondary);
 }
-

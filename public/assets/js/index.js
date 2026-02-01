@@ -1,95 +1,110 @@
 "use strict";
 
-/**
- * @type {HTMLFormElement}
- */
+/* ===============================
+   DOM references (HTML準拠)
+=============================== */
+
 const form = document.getElementById("uv-form");
-/**
- * @type {HTMLInputElement}
- */
 const address = document.getElementById("uv-address");
-/**
- * @type {HTMLInputElement}
- */
-const searchEngine = document.getElementById("uv-search-engine");
-/**
- * @type {HTMLParagraphElement}
- */
-const error = document.getElementById("uv-error");
-/**
- * @type {HTMLPreElement}
- */
-const errorCode = document.getElementById("uv-error-code");
 
-const input = document.querySelector("input");
+/* 要素が存在しない場合は何もしない */
+if (!form || !address) {
+    console.warn("[Yoroxy] uv-form or uv-address not found");
+}
 
-// crypts class definition
+/* ===============================
+   Simple obfuscation (Ultraviolet)
+=============================== */
+
 class crypts {
-  static encode(str) {
-    return encodeURIComponent(
-      str
-        .toString()
-        .split("")
-        .map((char, ind) => (ind % 2 ? String.fromCharCode(char.charCodeAt() ^ 2) : char))
-        .join("")
-    );
-  }
-
-  static decode(str) {
-    if (str.charAt(str.length - 1) === "/") {
-      str = str.slice(0, -1);
+    static encode(str) {
+        return encodeURIComponent(
+            String(str)
+                .split("")
+                .map((c, i) =>
+                    i % 2 ? String.fromCharCode(c.charCodeAt(0) ^ 2) : c
+                )
+                .join("")
+        );
     }
-    return decodeURIComponent(
-      str
-        .split("")
-        .map((char, ind) => (ind % 2 ? String.fromCharCode(char.charCodeAt() ^ 2) : char))
-        .join("")
-    );
-  }
+
+    static decode(str) {
+        if (str.endsWith("/")) str = str.slice(0, -1);
+        return decodeURIComponent(
+            str
+                .split("")
+                .map((c, i) =>
+                    i % 2 ? String.fromCharCode(c.charCodeAt(0) ^ 2) : c
+                )
+                .join("")
+        );
+    }
 }
 
-// Search function definition
-function search(input) {
-  input = input.trim();  // Trim the input to remove any whitespace
-  // Retrieve the search engine URL template from localStorage or use default
-  const searchTemplate = 'https://google.com/search?q=%s';
+/* ===============================
+   URL / Search resolver
+=============================== */
 
-  try {
-    // Try to treat the input as a URL
-    return new URL(input).toString();
-  } catch (err) {
-    // The input was not a valid URL; attempt to prepend 'http://'
+function resolveInput(value) {
+    const input = value.trim();
+    const searchTemplate = "https://www.google.com/search?q=%s";
+
+    if (!input) return "";
+
+    /* 1. 完全な URL */
     try {
-      const url = new URL(`http://${input}`);
-      if (url.hostname.includes(".")) {
-        return url.toString();
-      }
-      throw new Error('Invalid hostname');  // Force jump to the next catch block
-    } catch (err) {
-      // The input was not a valid URL - treat as a search query
-      return searchTemplate.replace("%s", encodeURIComponent(input));
-    }
-  }
+        return new URL(input).toString();
+    } catch {}
+
+    /* 2. スキーム無し URL */
+    try {
+        const url = new URL("http://" + input);
+        if (url.hostname.includes(".")) {
+            return url.toString();
+        }
+    } catch {}
+
+    /* 3. 検索 */
+    return searchTemplate.replace("%s", encodeURIComponent(input));
 }
-if ('serviceWorker' in navigator) {
-  var proxySetting = 'uv';
-  let swConfig = {
-    'uv': { file: '/uv/sw.js', config: __uv$config }
-  };
 
-  let { file: swFile, config: swConfigSettings } = swConfig[proxySetting];
+/* ===============================
+   Service Worker (Ultraviolet)
+=============================== */
 
-  navigator.serviceWorker.register(swFile, { scope: swConfigSettings.prefix })
-    .then((registration) => {
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        
-        let encodedUrl = swConfigSettings.prefix + crypts.encode(search(address.value));
-        location.href = encodedUrl;
-      });
-    })
-    .catch((error) => {
-      console.error('ServiceWorker registration failed:', error);
-    });
+if ("serviceWorker" in navigator && form && address) {
+    const proxySetting = "uv";
+
+    const swMap = {
+        uv: {
+            file: "/uv/sw.js",
+            config: self.__uv$config
+        }
+    };
+
+    const sw = swMap[proxySetting];
+    if (!sw || !sw.config) {
+        console.error("[Yoroxy] UV config not found");
+    } else {
+        navigator.serviceWorker
+            .register(sw.file, { scope: sw.config.prefix })
+            .then(() => {
+                console.log("[Yoroxy] ServiceWorker registered");
+
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault();
+
+                    const resolved = resolveInput(address.value);
+                    if (!resolved) return;
+
+                    const encoded =
+                        sw.config.prefix + crypts.encode(resolved);
+
+                    window.location.href = encoded;
+                });
+            })
+            .catch((err) => {
+                console.error("[Yoroxy] ServiceWorker failed:", err);
+            });
+    }
 }

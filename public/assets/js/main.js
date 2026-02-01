@@ -1,210 +1,131 @@
-       const colorPicker = document.getElementById("colorPicker");
-        colorPicker.addEventListener("input", function () {
-            document.documentElement.style.setProperty(
-                "--theme-color",
-                colorPicker.value
-            );
-            localStorage.setItem("themeColor", colorPicker.value);
+document.addEventListener("DOMContentLoaded", () => {
+    const root = document.documentElement;
+
+    /* ===============================
+       Theme color pickers
+    =============================== */
+
+    function bindColorPicker(id, cssVar, storageKey) {
+        const picker = document.getElementById(id);
+        if (!picker) return;
+
+        picker.addEventListener("input", () => {
+            root.style.setProperty(cssVar, picker.value);
+            localStorage.setItem(storageKey, picker.value);
         });
 
-        const savedColor = localStorage.getItem("themeColor");
-        if (savedColor) {
-            document.documentElement.style.setProperty(
-                "--theme-color",
-                savedColor
-            );
-            colorPicker.value = savedColor;
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+            root.style.setProperty(cssVar, saved);
+            picker.value = saved;
         }
+    }
 
-        const colorPicker2 = document.getElementById("colorPicker2");
-        colorPicker2.addEventListener("input", function () {
-            document.documentElement.style.setProperty(
-                "--shadow-color",
-                colorPicker2.value
-            );
-            localStorage.setItem("shadowColor", colorPicker2.value);
+    bindColorPicker("colorPicker", "--theme-color", "themeColor");
+    bindColorPicker("colorPicker2", "--shadow-color", "shadowColor");
+    bindColorPicker("colorPicker3", "--shadow-color2", "shadowColor2");
+
+    /* ===============================
+       Dark / Light background toggle
+    =============================== */
+
+    const bgToggle = document.getElementById("backgroundToggle");
+
+    function applyBackground(isDark) {
+        document.body.style.backgroundColor = isDark ? "#000" : "#fff";
+        document.body.style.color = isDark ? "#fff" : "#4c4c4c";
+    }
+
+    if (bgToggle) {
+        const savedToggle = localStorage.getItem("backgroundToggle") === "true";
+        bgToggle.checked = savedToggle;
+        applyBackground(savedToggle);
+
+        bgToggle.addEventListener("change", () => {
+            localStorage.setItem("backgroundToggle", bgToggle.checked);
+            applyBackground(bgToggle.checked);
         });
+    }
 
-        const savedColor2 = localStorage.getItem("shadowColor");
-        if (savedColor2) {
-            document.documentElement.style.setProperty(
-                "--shadow-color",
-                savedColor2
-            );
-            colorPicker2.value = savedColor2;
+    /* ===============================
+       Background image upload
+    =============================== */
+
+    const bgDiv = document.getElementById("background");
+    const fileInput = document.getElementById("file-input");
+
+    if (bgDiv) {
+        const savedImage = localStorage.getItem("backgroundImage");
+        if (savedImage) {
+            bgDiv.style.backgroundImage = savedImage;
         }
+    }
 
-        const colorPicker3 = document.getElementById("colorPicker3");
-        colorPicker3.addEventListener("input", function () {
-            document.documentElement.style.setProperty(
-                "--shadow-color2",
-                colorPicker3.value
-            );
-            localStorage.setItem("shadowColor2", colorPicker3.value);
+    if (fileInput && bgDiv) {
+        fileInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = `url(${ev.target.result})`;
+                bgDiv.style.backgroundImage = img;
+                localStorage.setItem("backgroundImage", img);
+            };
+            reader.readAsDataURL(file);
         });
+    }
 
-        const savedColor3 = localStorage.getItem("shadowColor2");
-        if (savedColor3) {
-            document.documentElement.style.setProperty(
-                "--shadow-color2",
-                savedColor3
-            );
-            colorPicker3.value = savedColor3;
-        }
+    /* ===============================
+       Clock (only if #time exists)
+    =============================== */
 
-        // Function to toggle the background color
-        function toggleBackground() {
-            // Check the current state of the checkbox
-            var isChecked = document.getElementById("backgroundToggle").checked;
+    const timeEl = document.getElementById("time");
+    if (timeEl) {
+        const tick = () => {
+            timeEl.textContent = new Date().toLocaleTimeString();
+        };
+        tick();
+        setInterval(tick, 1000);
+    }
+});
 
-            // Set the background color based on the checkbox state
-            document.body.style.backgroundColor = isChecked ? "black" : "white";
-            document.body.style.color = isChecked ? "#fff" : "#4c4c4c";
-            
+/* ===============================
+   Fullscreen
+=============================== */
 
-            // Save the state to local storage
-            localStorage.setItem("backgroundToggle", isChecked);
-        }
+function openFullscreen() {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if (el.msRequestFullscreen) el.msRequestFullscreen();
+}
 
-        // Function to load the saved background color
-        function loadBackground() {
-            // Get the saved state from local storage
-            var isChecked = localStorage.getItem("backgroundToggle") === "true";
+function closeFullscreen() {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.msExitFullscreen) document.msExitFullscreen();
+}
 
-            // Set the checkbox state and background color
-            document.getElementById("backgroundToggle").checked = isChecked;
-            toggleBackground();
-        }
+/* ===============================
+   Cloak window (Yoroxy仕様)
+=============================== */
 
-        // Add event listener to the checkbox
-        document.addEventListener("DOMContentLoaded", function () {
-            var checkbox = document.getElementById("backgroundToggle");
-            checkbox.addEventListener("change", toggleBackground);
+function openGame() {
+    const win = window.open();
+    if (!win) return;
 
-            // Load the background color when the page is loaded
-            loadBackground();
-        });
-        // Check for saved background in localStorage
-        if (localStorage.getItem("backgroundImage")) {
-            document.getElementById("background").style.backgroundImage =
-                localStorage.getItem("backgroundImage");
-        }
+    const iframe = win.document.createElement("iframe");
+    iframe.src = window.location.href;
+    iframe.style.cssText = `
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    `;
 
-        document
-            .getElementById("upload-img")
-            .addEventListener("click", function () {
-                document.getElementById("file-input").click();
-            });
-
-        document
-            .getElementById("file-input")
-            .addEventListener("change", function (event) {
-                var file = event.target.files[0];
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var backgroundImage = "url(" + e.target.result + ")";
-                    document.getElementById(
-                        "background"
-                    ).style.backgroundImage = backgroundImage;
-                    localStorage.setItem("backgroundImage", backgroundImage);
-                };
-                reader.readAsDataURL(file);
-            });
-
-        document
-            .getElementById("reset-img")
-            .addEventListener("click", function () {
-                // Reset the background to the default state
-                document.getElementById("background").style.backgroundImage =
-                    "";
-                localStorage.removeItem("backgroundImage");
-            });
-
-        function myClock() {
-            setTimeout(function () {
-                const d = new Date();
-                const n = d.toLocaleTimeString();
-                document.getElementById("time").innerHTML = n;
-                myClock();
-            }, 1000);
-        }
-        myClock();
-
-        var elem = document.documentElement;
-
-        function openFullscreen() {
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) {
-                /* Safari */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                /* IE11 */
-                elem.msRequestFullscreen();
-            }
-        }
-
-        function closeFullscreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                /* Safari */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                /* IE11 */
-                document.msExitFullscreen();
-            }
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-            const currentUrl = "https://desmos.com";
-            const defaultKey = "`";
-            let triggerKey = defaultKey;
-
-            function updateTriggerKey(value) {
-                triggerKey = value.slice(0, 1); // Limit to the first character
-            }
-
-            document
-                .getElementById("keyInput")
-                .addEventListener("input", (e) => {
-                    updateTriggerKey(e.target.value);
-                });
-
-            document
-                .getElementById("keyInput")
-                .addEventListener("keypress", (e) => {
-                    if (e.key === "Enter") {
-                        updateTriggerKey(e.target.value);
-                        e.preventDefault(); // Prevent form submission if inside a form
-                    }
-                });
-
-            document.addEventListener("keydown", (e) => {
-                if (e.key === triggerKey) {
-                    window.location.href = currentUrl;
-                }
-            });
-        });
-
-        function openGame() {
-            var win = window.open();
-            var url = window.location.href;
-            var iframe = win.document.createElement("iframe");
-            iframe.style.frameborder = "0";
-            iframe.style.marginwidth = "0";
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            iframe.style.border = "none";
-            iframe.style.position = "fixed";
-            iframe.style.inset = "0px";
-            iframe.style.outline = "none";
-            iframe.style.scrolling = "auto";
-            iframe.src = url;
-            win.document.title = "Google";
-            var link = win.document.createElement("link");
-            link.rel = "icon";
-            link.type = "image/x-icon";
-            link.href = "https://www.google.com/favicon.ico";
-            win.document.head.appendChild(link);
-            win.document.body.appendChild(iframe);
-        }
+    win.document.title = "Yoroxy";
+    win.document.body.style.margin = "0";
+    win.document.body.appendChild(iframe);
+}
