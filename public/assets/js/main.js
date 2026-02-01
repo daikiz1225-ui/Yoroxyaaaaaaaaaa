@@ -105,7 +105,7 @@
     }
 
     const proxySetting = "uv";
-    const swMap = { uv: { file: "/uv/uv.sw.js", config: uvConfig } };
+    const swMap = { uv: { file: "/uv/sw.js", config: uvConfig } };
     const sw = swMap[proxySetting];
 
     if (!sw) {
@@ -135,7 +135,7 @@
           }
 
           try {
-            const encoded = "/p/" + Base64.encode(resolved);
+            const encoded = sw.config.prefix + Base64.encode(resolved);
             console.debug("[Yoroxy] Navigating to:", encoded);
             window.location.href = encoded;
           } catch (err) {
