@@ -1,1 +1,55 @@
-# Yoroxy
+<div align="center">
+  <h1>Yoroxy</h1>
+  <h3>A fast, simple, and highly customizable proxy.</h3>
+  <a href="https://render.com/deploy?repo=https://github.com/Yosshy-Tech-Club/Yoroxy.git"><img height="30px" src="https://render.com/images/deploy-to-render-button.svg" /></a>
+</div>
+
+---
+
+## Directory structure
+
+```
+├── public/
+│   ├── assets/
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   ├── images/
+│   │   │   └── search.svg
+│   │   └── js/
+│   │       └── main.js
+│   ├── uv/
+│   │   ├── sw.js
+│   │   ├── uv.bundle.js
+│   │   ├── uv.bundle.js.map
+│   │   ├── uv.client.js
+│   │   ├── uv.client.js.map
+│   │   ├── uv.config.js
+│   │   ├── uv.handler.js
+│   │   ├── uv.handler.js.map
+│   │   ├── uv.sw.js
+│   │   └── uv.sw.js.map
+│   └── index.html
+├── index.js
+├── LICENSE
+├── package.json
+├── README.md
+└── render.yaml
+```
+
+---
+
+## Live demo
+
+[https://yoroxy.onrender.com/](https://yoroxy.onrender.com/)
+
+---
+
+## Bug reports & feedback
+
+For bug reports or suggestions for improvement, please **open an Issue or submit a Pull request**.
+
+---
+
+## License
+
+This project is provided under the **MIT License**.
