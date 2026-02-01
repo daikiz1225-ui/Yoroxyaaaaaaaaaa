@@ -1,7 +1,7 @@
 <div align="center">
   <h1>Yoroxy</h1>
   <h3>A fast, simple, and highly customizable proxy.</h3>
-  <a href="https://render.com/deploy?repo=https://github.com/Yosshy-Tech-Club/Yoroxy.git"><img height="30px" src="https://render.com/images/deploy-to-render-button.svg" /></a>
+  <a href="https://render.com/deploy?repo=https://github.com/Yosshy-123/Yoroxy.git"><img height="30px" src="https://render.com/images/deploy-to-render-button.svg" /></a>
 </div>
 
 ---
