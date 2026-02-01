@@ -1,66 +1,54 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="title" content="Yoroxy" />
   <meta name="description" content="A fast, simple, and highly customizable proxy." />
   <title>Yoroxy</title>
   <link rel="stylesheet" href="/assets/css/main.css" />
 </head>
 <body onload="startTime()">
+  <div id="background" aria-hidden="true"></div>
+
   <div class="app-root">
-    <header style="margin: 10px 1%;">
-      <h1 style="margin: 0; font-size: 1.25rem;">Yoroxy</h1>
-    </header>
-
     <main>
-      <div class="card" style="position: fixed;">
-        <div class="searchbar" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
-          <div class="searchbar-wrapper">
-            <div class="searchbar-left">
-              <div class="search-icon-wrapper">
-                <span class="search-icon searchbar-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-                  </svg>
-                </span>
-              </div>
+      <div class="center-panel">
+        <div class="card" role="region" aria-labelledby="brand-title">
+          <div class="card-header">
+            <div class="brand" id="brand-title">
+              <span class="text">Yoroxy</span>
             </div>
+          </div>
 
-            <form id="uv-form" class="searchbar-center" role="search" autocomplete="off">
-              <div class="searchbar-input-spacer" aria-hidden="true"></div>
+          <div class="search-area">
+            <form id="uv-form" class="searchbar" role="search" autocomplete="off">
+              <div class="icon" aria-hidden="true">
+                <!-- search icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5a6.5 6.5 0 1 0-6.5 6.5c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.505 4.505 0 0 1 9.5 14z"/>
+                </svg>
+              </div>
+
               <input
                 id="uv-address"
-                type="text"
-                class="searchbar-input"
+                name="q"
+                type="search"
+                class="search-input"
                 maxlength="2048"
                 autocapitalize="off"
                 autocomplete="off"
-                title="Search"
                 role="combobox"
-                placeholder="Search Anything"
+                aria-label="検索"
+                placeholder="Search anything (URL or query)"
               />
             </form>
           </div>
-        </div>
 
-        <div class="blob" aria-hidden="true"></div>
+          <div class="blob" aria-hidden="true"></div>
+        </div>
       </div>
     </main>
-
-    <div style="position: absolute; bottom: 20px; left: 20px;">
-      <label class="container" title="Click for dark/light mode">
-        <input checked="checked" type="checkbox" id="backgroundToggle" />
-      </label>
-
-      <div class="group" style="position: fixed; bottom: 4px; left: 43px; padding-top: 2px; padding-left: 2px; padding-right: 2px;"></div>
-    </div>
-
-    <div style="position: absolute; bottom: 10px; right: 10px; padding-top: 5px; padding-bottom: 2px;">
-      <div id="background" aria-hidden="true"></div>
-      <input type="file" id="file-input" accept="image/*" />
-    </div>
   </div>
 
   <script src="/uv/uv.bundle.js"></script>
