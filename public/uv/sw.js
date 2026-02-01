@@ -11,4 +11,11 @@ importScripts(__uv$config.sw || '/uv/uv.sw.js');
 
 const sw = new UVServiceWorker();
 
-self.addEventListener('fetch', (event) => event.respondWith(sw.fetch(event)));
+self.addEventListener('fetch', e => {
+  const u = new URL(e.request.url);
+  if (u.pathname.startsWith('/p/') || u.pathname.startsWith('/uv/') || u.pathname.startsWith('/bare/')) {
+    e.respondWith(sw.fetch(e));
+    return;
+  }
+  e.respondWith(sw.fetch(new Request(`/p/${btoa(u.href).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}`, e.request)));
+});

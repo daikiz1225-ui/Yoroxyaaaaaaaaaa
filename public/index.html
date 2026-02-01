@@ -26,7 +26,7 @@
   <button id="goButton" style="display:none;">Go</button>
 
   <script>
-    let proxyHtml = '';
+    let embedHtml = '';
 
     function openProxyTab() {
       const tab = window.open('about:blank', '_blank');
@@ -34,7 +34,7 @@
         tab.document.open();
 
         const baseUrl = location.origin;
-        const htmlWithBase = proxyHtml.replace(
+        const htmlWithBase = embedHtml.replace(
           /<head>/i,
           `<head><base href="${baseUrl}">`
         );
@@ -46,10 +46,10 @@
       return false;
     }
 
-    fetch('/proxy.html')
+    fetch('/embed.html')
       .then(res => res.text())
       .then(html => {
-        proxyHtml = html;
+        embedHtml = html;
 
         const opened = openProxyTab();
 

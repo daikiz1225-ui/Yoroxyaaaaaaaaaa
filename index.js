@@ -14,12 +14,12 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use("uv", express.static(__dirname + '/uv'));
 app.use(cors());
 
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(process.cwd(), '/public/index.html'));
+app.use(express.static(__dirname + '/public'));
+app.get('/p/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'proxy.html'));
 });
 
 server.on('request', (req, res) => {
