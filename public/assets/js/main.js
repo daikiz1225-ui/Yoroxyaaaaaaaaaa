@@ -57,7 +57,7 @@ function resolveInput(value) {
 =============================== */
 
 if ("serviceWorker" in navigator && form && address) {
-    const config = globalThis.__uv$config;
+    const config = self.__uv$config;
 
     if (!config || !config.prefix) {
         console.error("[Yoroxy] UV config not found");
