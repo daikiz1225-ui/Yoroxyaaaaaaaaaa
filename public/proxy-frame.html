@@ -85,7 +85,7 @@
   </header>
 
   <div class="frame-wrap">
-    <iframe id="proxy-iframe" src="/proxy.html" title="Proxy"></iframe>
+    <iframe id="proxy-iframe" src="/proxy.html" title="Frame"></iframe>
   </div>
 
   <script>
@@ -94,30 +94,12 @@
       event.returnValue = '';
     });
 
-    document.getElementById('home-btn').addEventListener('click', function () {
+    const home = () => {
       const iframe = document.getElementById('proxy-iframe');
-      try {
-        const currentPath = new URL(iframe.src, window.location.href).pathname;
-        if (currentPath === '/proxy.html') {
-          try {
-            iframe.contentWindow.location.reload();
-          } catch (e) {
-            iframe.src = '/proxy.html';
-          }
-        } else {
-          iframe.src = '/proxy.html';
-        }
-      } catch (err) {
-        iframe.src = '/proxy.html';
-      }
-    });
+      iframe.src = '/proxy.html';
+    };
 
-    window.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'h'){
-        e.preventDefault();
-        document.getElementById('home-btn').click();
-      }
-    });
+    document.getElementById('home-btn').addEventListener('click', home);
   </script>
 </body>
 </html>
