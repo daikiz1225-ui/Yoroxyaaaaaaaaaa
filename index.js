@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8080;
 
 const bareServer = createBareServer("/bare/");
 const app = express();
-const server = http.createServer();
+const server = http.createServer(app);
 
 /* ===============================
    Middleware
@@ -41,8 +41,6 @@ app.get("/", (_req, res) => {
 server.on("request", (req, res) => {
     if (bareServer.shouldRoute(req)) {
         bareServer.routeRequest(req, res);
-    } else {
-        app(req, res);
     }
 });
 
