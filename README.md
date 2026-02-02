@@ -13,6 +13,11 @@
 │   ├── assets/
 │   │   ├── css/
 │   │   │   └── style.css
+│   │   ├── frame/
+│   │   │   ├── css/
+│   │   │   │   └── style.css
+│   │   │   └── js/
+│   │   │       └── main.js
 │   │   ├── images/
 │   │   │   └── search.svg
 │   │   └── js/
@@ -20,14 +25,10 @@
 │   ├── uv/
 │   │   ├── sw.js
 │   │   ├── uv.bundle.js
-│   │   ├── uv.bundle.js.map
 │   │   ├── uv.client.js
-│   │   ├── uv.client.js.map
 │   │   ├── uv.config.js
 │   │   ├── uv.handler.js
-│   │   ├── uv.handler.js.map
-│   │   ├── uv.sw.js
-│   │   └── uv.sw.js.map
+│   │   └── uv.sw.js
 │   ├── index.html
 │   ├── proxy-frame.html
 │   └── proxy.html
