@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uv", express.static(path.join(__dirname, "uv")));
+app.use("/uv", express.static(__dirname + '/public/uv'));
 
 /* ===============================
    Routes

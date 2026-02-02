@@ -31,8 +31,8 @@ if (document.readyState === "loading") {
 =============================== */
 
 function resolveInput(value) {
-    const input = String(value || "").trim();
-    const searchTemplate = "https://duckduckgo.com/?q=%s";
+    const input = value.trim();
+    const searchTemplate = "http://duckduckgo.com/?q=%s";
 
     if (!input) return "";
 
@@ -41,11 +41,9 @@ function resolveInput(value) {
     } catch {}
 
     try {
-        const hostPortPattern =
-            /^([a-zA-Z0-9.-]+|\d{1,3}(?:\.\d{1,3}){3}):\d{1,5}(\/.*)?$/;
-
-        if (hostPortPattern.test(input)) {
-            return new URL("http://" + input).toString();
+        const url = new URL("http://" + input);
+        if (url.hostname.includes(".")) {
+            return url.toString();
         }
     } catch {}
 
@@ -53,17 +51,25 @@ function resolveInput(value) {
 }
 
 /* ===============================
-   Service Worker (Ultraviolet)
+   Service Worker
 =============================== */
 
 if ("serviceWorker" in navigator && form && address) {
-    const config = self.__uv$config;
+    const proxySetting = "uv";
 
-    if (!config || !config.prefix) {
+    const swMap = {
+        uv: {
+            file: "/uv/sw.js",
+            config: self.__uv$config
+        }
+    };
+
+    const sw = swMap[proxySetting];
+    if (!sw || !sw.config) {
         console.error("[Yoroxy] UV config not found");
     } else {
         navigator.serviceWorker
-            .register("/uv/sw.js", { scope: config.prefix })
+            .register(sw.file, { scope: sw.config.prefix })
             .then(() => {
                 console.log("[Yoroxy] ServiceWorker registered");
 
@@ -74,7 +80,7 @@ if ("serviceWorker" in navigator && form && address) {
                     if (!resolved) return;
 
                     const encoded =
-                        config.prefix + encodeURIComponent(resolved);
+                        sw.config.prefix + encodeURIComponent(resolved);
 
                     window.location.href = encoded;
                 });
