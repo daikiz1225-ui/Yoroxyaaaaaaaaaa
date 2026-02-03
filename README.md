@@ -52,4 +52,4 @@ For bug reports or suggestions for improvement, please **open an Issue or submit
 
 ## License
 
-This project is provided under the **MIT License**.
+This project is provided under the **AGPL-3.0 License**.
