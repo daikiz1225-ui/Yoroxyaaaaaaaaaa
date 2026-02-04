@@ -15,7 +15,6 @@
   --dur-base: 320ms;
 }
 
-/* ダークモード保持 */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-1: #071026;
@@ -28,114 +27,98 @@
   }
 }
 
-/* ---------- Base / overflow control ---------- */
 * {
   box-sizing: border-box;
 }
 
 html,
 body {
-  /* ビューポート高さを正確に使う（可能な限り modern browser 向けに 100dvh） */
-  height: 100dvh;
+  height: 100%;
+}
+
+body {
   margin: 0;
-  -webkit-text-size-adjust: 100%;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--text);
   background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-/* ---------- Layout ---------- */
+#background {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
 .app-root {
   width: 100%;
   max-width: 1200px;
-  padding: clamp(12px, 4vw, 28px);
+  padding: clamp(16px, 4vw, 32px);
 }
 
 .layout {
-  height: 100%;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ---------- Center / Card ---------- */
 .center-panel {
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 0;
 }
 
 .card {
-  position: relative;
-  width: min(880px, calc(100vw - 40px));
+  width: 100%;
   max-width: 880px;
   background: var(--glass);
   border-radius: calc(var(--radius) + 2px);
-  padding: clamp(12px, 2.5vw, 22px);
+  padding: clamp(16px, 3vw, 24px);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(12px) saturate(120%);
   display: flex;
   flex-direction: column;
-  gap: clamp(10px, 2vw, 16px);
-  transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
-  max-height: calc(100dvh - 32px);
+  gap: 16px;
+  transition:
+    transform var(--dur-base) var(--ease),
+    box-shadow var(--dur-base) var(--ease);
 }
 
-.card-inner {
-  display: flex;
-  flex-direction: column;
-  gap: inherit;
-  min-height: 0;
-  overflow: auto;
-  padding: 0;
-}
-
-/* フォーカス時の挙動 */
 .card:focus-within {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-strong);
 }
 
-/* ---------- Header / Brand ---------- */
 .card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex: 0 0 auto;
 }
 
 .brand {
   font-weight: 600;
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-size: 1rem;
   color: var(--primary-600);
 }
 
-/* ---------- Search area ---------- */
 .search-area {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   width: 100%;
-  min-width: 0;
 }
 
 .searchbar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
-  padding: clamp(8px, 2vw, 12px);
+  padding: clamp(10px, 2vw, 14px);
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.82));
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0.82));
   border: 1px solid rgba(79, 156, 255, 0.12);
-  min-width: 0;
 }
 
 .searchbar:focus-within {
@@ -150,96 +133,29 @@ body {
 }
 
 .search-input {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1;
   border: none;
   background: transparent;
   outline: none;
-  font-size: clamp(15px, 2.3vw, 20px);
+  font-size: clamp(15px, 2.5vw, 20px);
   color: var(--text);
-  line-height: 1;
-  padding: 0;
 }
 
 .search-input::placeholder {
   color: var(--muted);
-  opacity: 0.95;
-}
-
-@media (max-width: 520px) {
-  .card {
-    padding: clamp(10px, 3vw, 14px);
-    gap: 10px;
-    width: calc(100vw - 24px);
-    max-height: calc(100dvh - 24px);
-  }
-
-  .card-header {
-    gap: 8px;
-  }
-
-  .brand {
-    font-size: 1rem;
-  }
-
-  .searchbar {
-    padding: 8px 10px;
-  }
-
-  .search-input {
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 380px) {
-  .card {
-    padding: 8px;
-    gap: 8px;
-    width: calc(100vw - 16px);
-    max-height: calc(100dvh - 16px);
-  }
-
-  .brand {
-    font-size: 0.95rem;
-  }
-
-  .search-input {
-    font-size: 14px;
-  }
 }
 
 @media (min-width: 768px) {
   .card {
     flex-direction: row;
     align-items: center;
-    gap: 18px;
   }
 
   .card-header {
-    margin-right: 8px;
+    margin-right: 16px;
   }
 
   .search-area {
-    flex: 1 1 auto;
-  }
-
-  .card {
-    max-height: calc(100dvh - 48px);
-  }
-}
-
-.card-inner::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
-}
-
-.card-inner::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 6px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    transition: none;
+    flex: 1;
   }
 }
