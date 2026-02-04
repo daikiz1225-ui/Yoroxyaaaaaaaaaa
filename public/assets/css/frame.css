@@ -5,21 +5,23 @@
   --bar-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-html,
-body {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
-  box-sizing: border-box;
 }
 
 body {
   display: flex;
   flex-direction: column;
+  min-height: 100%;
   background: #f3f4f6;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .topbar {
@@ -35,6 +37,7 @@ body {
   flex-shrink: 0;
 }
 
+/* ボタン類 */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -48,26 +51,25 @@ body {
   cursor: pointer;
   font-size: 14px;
 }
-
-.btn:active {
-  transform: translateY(1px);
-}
-
-.btn:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.12);
-  outline-offset: 2px;
-}
+.btn:active { transform: translateY(1px); }
+.btn:focus  { outline: 2px solid rgba(255,255,255,0.12); outline-offset: 2px; }
 
 .frame-wrap {
-  height: calc(100% - var(--bar-height));
   flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
 }
 
-iframe {
+.frame-wrap > iframe {
+  flex: 1 1 auto;
   width: 100%;
   height: 100%;
   border: none;
   display: block;
+  min-width: 0;
+  min-height: 0;
 }
 
 /* small responsive tweaks */
