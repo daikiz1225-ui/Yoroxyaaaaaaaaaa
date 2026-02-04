@@ -1,8 +1,3 @@
-window.addEventListener('beforeunload', (event) => {
-  event.preventDefault();
-  event.returnValue = '';
-});
-
 const home = () => {
   const iframe = document.getElementById('proxy-iframe');
   iframe.src = '/proxy.html';
