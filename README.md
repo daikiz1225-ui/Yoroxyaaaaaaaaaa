@@ -46,7 +46,11 @@
 
 ## Bug reports & feedback
 
-For bug reports or suggestions for improvement, please **open an Issue or submit a Pull request**.
+For bug reports or suggestions for improvement, please **open an Issue** or contact *Yosshy_123@proton.me*.
+
+> [!NOTE]
+> If you contact by email, replies may be delayed.
+> If possible, prefer creating an Issue as it is easier to track.
 
 ---
 
