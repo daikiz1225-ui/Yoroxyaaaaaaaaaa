@@ -99,7 +99,7 @@ const SEARCH_TEMPLATES = [
   "https://duckduckgo.com/?q=%s",
   "SEARX",
   "https://duckduckgo.com/html/?q=%s",
-  "https://lite.duckduckgo.com/lite/?q=%s"
+  "https://lite.duckduckgo.com/lite/?q=%s",
 ];
 
 function fetchWithTimeout(url) {
@@ -142,9 +142,7 @@ async function getSearxUrls(query) {
 
 function extractSearxInstances(data) {
   const list =
-    Array.isArray(data.online_https) ? data.online.https :
-    Array.isArray(data.online) ? data.online :
-    [];
+    Array.isArray(data.online_https) ? data.online_https : [];
 
   return list
     .map(i => normalizeSearxBase(i.url))
