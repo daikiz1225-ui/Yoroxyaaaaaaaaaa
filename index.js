@@ -15,6 +15,48 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, "public")));
 
+app.get("/api/search", async (req, res) => {
+  const q = String(req.query.q || "").trim();
+  if (!q) return res.status(400).json({ error: "missing q" });
+
+  const engines = [
+    "https://duckduckgo.com/?q=%s",
+    "https://www.startpage.com/sp/search?q=%s",
+    "https://search.brave.com/search?q=%s",
+    "https://duckduckgo.com/html/?q=%s",
+    "https://lite.duckduckgo.com/lite/?q=%s"
+  ];
+
+  const query = encodeURIComponent(q);
+
+  for (const tpl of engines) {
+    const url = tpl.replace("%s", query);
+
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 2000);
+
+      const r = await fetch(url, {
+        method: "GET",
+        signal: controller.signal,
+        headers: {
+          "User-Agent": "Mozilla/5.0"
+        }
+      });
+
+      clearTimeout(timer);
+
+      if (r.ok) {
+        return res.json({ url });
+      }
+    } catch (e) {
+      // fail -> next engine
+    }
+  }
+
+  return res.status(502).json({ error: "no search engine available" });
+});
+
 server.on('request', (req, res) => {
   if (bareServer.shouldRoute(req)) {
     bareServer.routeRequest(req, res)
